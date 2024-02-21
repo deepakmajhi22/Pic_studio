@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="content">
+        <p class="header">Create Account</p>
+        <form action="/register" method="post" enctype="multipart/form-data">
+          
+          <input
+            type="text"
+            name="username"
+            placeholder="username"
+            class="detail"
+          /><br />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            class="detail"
+          /><br />
+          <input
+            type="text"
+            name="fullname"
+            placeholder="Fullname"
+            class="detail"
+          /><br />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="detail"
+          />
+          
+            <input class="form-control" type="file" name="avatar">
+  
+          <button type="submit" class="btn int">Register</button>
+        </form>
+        <a href="/login">Already On Pinterest? Login</a>
+
+        <footer>
+          <p>
+            By continuing, you agree to Pinterest's
+            <b>Terms of Service, Privacy policy.</b>
+          </p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

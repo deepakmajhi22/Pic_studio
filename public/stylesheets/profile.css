@@ -1,0 +1,226 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway|Varela+Round|Coda);
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+
+body {
+  background: #bde0fe;
+  text-decoration: none;
+}
+
+.row {
+  display: flex;
+}
+
+.col {
+  flex: 50%;
+}
+.entypo-eye{
+  font-size: 0.1%;
+}
+.title-pen {
+  color: #080808;
+  font-family: "Coda", sans-serif;
+  text-align: center;
+}
+
+.title-pen span {
+  background: #bde0fe;
+}
+
+.user-profile {
+  margin-left: 0.5%;
+  width: 95%;
+  height: auto;
+  padding: 2%;
+  border-radius: .5em;
+  background: #bde0fe;
+}
+
+.user-profile .username {
+  margin-top: -4.40em;
+  text-align: center;
+  color: #415a77;
+  font-size: 1.53em;
+  font-weight: bold;
+}
+
+.user-profile .bio {
+  margin: auto;
+  text-align: center;
+  color: #e76043;
+  font-size: .87em;
+  font-family: "varela round", sans-serif;
+}
+
+.user-profile>.description {
+  text-align: center;
+  color: #c0c5c5;
+  font-size: .87em;
+  font-family: "varela round", sans-serif;
+}
+
+.user-profile>img.avatar {
+  margin-bottom: 1.1em;
+  margin-left: 3.3em;
+  height: 6.23em;
+  width: 6.23em;
+  border-radius: 18em;
+}
+
+.user-profile ul.data {
+  margin: auto auto;
+  height: 4em;
+  background: #d8a4b7;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+.user-profile li {
+  display: inline-block;
+  width: 50%;
+  display: table-cell;
+  text-align: center;
+}
+
+.user-profile span {
+  font-family: "varela round", sans-serif;
+  color: #000000;
+  white-space: nowrap;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+#btn {
+  height: 40px;
+  border-radius: 20px;
+  font-size: 18px;
+  margin: 5px 0px;
+}
+
+.int {
+  background-color: #000000;
+  margin: 10px 41% 10px 41%;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.int:hover {
+  background-color: #df0812;
+}
+
+.card {
+  width: 18rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.navigation {
+  color: #111111;
+}
+
+.upload {
+  text-align: center;
+  margin: auto;
+  width: 95%;
+  height: auto;
+  padding: 2%;
+  border-radius: .5em;
+  background: #bde0fe;
+  justify-content: center;
+}
+
+.upload button {
+  background-color: #bde0fe;
+}
+
+form {
+  min-width: 300px;
+  max-width: 400px;
+  padding: 20px;
+  margin: 0 auto;
+  background: #ffffff59;
+}
+
+form input {
+  border: 1px solid #eee;
+  border-radius: 0 !important;
+  padding: 5px 8px;
+  color: #444;
+}
+
+form button {
+  color: #555;
+  background: #ffffffad;
+  border: 1px solid #000000 !important;
+  margin-top: 20px;
+  border-radius: 0px Important;
+}
+
+form button:hover {
+  background: #fff !important;
+}
+
+.pull-right {
+  float: right;
+}
+
+.card button {
+  background: #0389ff;
+}
+.card{
+  display: flex;
+}
+
+/* Media Queries for responsiveness */
+@media screen and (max-width: 768px) {
+  .main {
+    width: 100%;
+  }
+
+  .users {
+    display: none;
+  }
+
+  /* Adjustments for smaller screens */
+  .user-profile .username {
+    margin-top: -0.5em; /* Adjust as needed */
+    font-size: 1.2em; /* Adjust as needed */
+  }
+
+  .user-profile>img.avatar {
+    margin-left: 117px;
+  }
+
+  .user-profile ul.data {
+    width: 90%; /* Adjust width for smaller screens */
+  }
+  #btn{
+    margin-left: 39%;
+  }
+  /* Make entypo-eye responsive */
+  .entypo-eye {
+    font-size: 1.5em; /* Adjust as needed */
+  }
+}
+
+.card{
+  margin-bottom: 5%;
+ 
+
+}
+.mypics{
+  width: 100%;
+  display: flex;
+  float: left;
+  flex-wrap: wrap;
+  margin-left: 5%;
+  margin-right: 5%;
+
+}
