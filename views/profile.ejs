@@ -112,6 +112,7 @@
                     </h5>
                     <p class="card-text"> Date: <%=post.createdAt%>
                         <%=post._id%>
+                        HashTags: <%=post.tags%>
                     </p>
                     <a href="/feed" class="btn">Check this in Feed</a>
                     <form action="/posts/<%= post._id %>" method="post">
