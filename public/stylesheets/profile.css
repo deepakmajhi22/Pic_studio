@@ -57,7 +57,7 @@ body {
 
 .user-profile>.description {
   text-align: center;
-  color: #c0c5c5;
+  color: #000000;
   font-size: .87em;
   font-family: "varela round", sans-serif;
 }
@@ -152,7 +152,7 @@ form input {
   border: 1px solid #eee;
   border-radius: 0 !important;
   padding: 5px 8px;
-  color: #444;
+  color: #000000;
 }
 
 form button {
