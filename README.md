@@ -36,7 +36,7 @@ To run the application locally, follow these steps:
 
 2. Navigate to the project directory:
    ```
-   cd free-pictures-app
+   cd Pic_Studio
    ```
 
 3. Install dependencies using npm:
