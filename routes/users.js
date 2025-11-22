@@ -31,7 +31,13 @@ const userschema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "post"
   }
-  ]
+  ],
+  resetPasswordToken: {
+    type: String
+  },
+  resetPasswordExpires: {
+    type: Date
+  }
 
 });
 userschema.plugin(plm);

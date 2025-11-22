@@ -154,6 +154,116 @@ router.post("/login",
   }), function (req, res, next) {
   });
 
+// Forgot Password Routes
+const crypto = require('crypto');
+const { sendPasswordResetEmail } = require('../utils/emailService');
+
+// GET forgot password page
+router.get("/forgot-password", function (req, res) {
+  res.render("forgot-password", { message: "", error: "" });
+});
+
+// POST forgot password - send reset email
+router.post("/forgot-password", async function (req, res) {
+  try {
+    const user = await userModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      return res.render("forgot-password", {
+        error: "No account with that email address exists.",
+        message: ""
+      });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    // Send email
+    const emailResult = await sendPasswordResetEmail(user.email, resetToken, req);
+
+    if (emailResult.success) {
+      res.render("forgot-password", {
+        message: "Password reset link has been sent to your email.",
+        error: ""
+      });
+    } else {
+      res.render("forgot-password", {
+        error: "Error sending email. Please try again later.",
+        message: ""
+      });
+    }
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.render("forgot-password", {
+      error: "An error occurred. Please try again.",
+      message: ""
+    });
+  }
+});
+
+// GET reset password page
+router.get("/reset-password/:token", async function (req, res) {
+  try {
+    const user = await userModel.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.render("forgot-password", {
+        error: "Password reset token is invalid or has expired.",
+        message: ""
+      });
+    }
+
+    res.render("reset-password", { token: req.params.token, error: "" });
+  } catch (error) {
+    console.error('Reset password GET error:', error);
+    res.redirect("/forgot-password");
+  }
+});
+
+// POST reset password - update password
+router.post("/reset-password/:token", async function (req, res) {
+  try {
+    const user = await userModel.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.render("forgot-password", {
+        error: "Password reset token is invalid or has expired.",
+        message: ""
+      });
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+      return res.render("reset-password", {
+        token: req.params.token,
+        error: "Passwords do not match."
+      });
+    }
+
+    // Update password using passport-local-mongoose method
+    await user.setPassword(req.body.password);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.redirect("/login");
+  } catch (error) {
+    console.error('Reset password POST error:', error);
+    res.render("reset-password", {
+      token: req.params.token,
+      error: "An error occurred. Please try again."
+    });
+  }
+});
+
 
 function isLoggedIn(req, res, next) {
   console.log('isLoggedIn:' + req.isAuthenticated());
