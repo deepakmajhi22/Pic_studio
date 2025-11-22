@@ -55,7 +55,10 @@
                       <span class="post-author"><i class="ri-user-line"></i>
                         <%= post.user ? post.user.username : 'Unknown' %>
                       </span>
-                      <!-- Add more meta info here if available in post object -->
+                      <button class="share-btn" data-post-id="<%= post._id %>" data-post-caption="<%= post.imageText %>"
+                        data-post-image="<%= post.image %>" title="Share">
+                        <i class="ri-share-line"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -71,6 +74,40 @@
       <img class="modal-image" id="modalImage">
       <div class="modal-caption" id="modalCaption"></div>
     </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="shareModal" class="share-modal">
+    <div class="share-modal-content">
+      <div class="share-modal-header">
+        <h3>Share Post</h3>
+        <button class="share-close-btn">&times;</button>
+      </div>
+      <div class="share-options">
+        <button class="share-option copy-link" id="copyLinkBtn">
+          <i class="ri-link"></i>
+          <span>Copy Link</span>
+        </button>
+        <a class="share-option twitter" id="twitterShare" target="_blank" rel="noopener noreferrer">
+          <i class="ri-twitter-x-fill"></i>
+          <span>Twitter</span>
+        </a>
+        <a class="share-option facebook" id="facebookShare" target="_blank" rel="noopener noreferrer">
+          <i class="ri-facebook-fill"></i>
+          <span>Facebook</span>
+        </a>
+        <a class="share-option whatsapp" id="whatsappShare" target="_blank" rel="noopener noreferrer">
+          <i class="ri-whatsapp-fill"></i>
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i class="ri-check-line"></i>
+    <span id="toastMessage">Link copied to clipboard!</span>
   </div>
 
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
@@ -146,7 +183,89 @@
       if (e.key === 'Escape' && modal.classList.contains('show')) {
         modal.classList.remove('show');
       }
+      if (e.key === 'Escape' && shareModal.classList.contains('show')) {
+        shareModal.classList.remove('show');
+      }
     });
+
+    // Share Modal Logic
+    const shareModal = document.getElementById('shareModal');
+    const shareCloseBtns = document.querySelectorAll('.share-close-btn');
+    const shareButtons = document.querySelectorAll('.share-btn');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    const twitterShare = document.getElementById('twitterShare');
+    const facebookShare = document.getElementById('facebookShare');
+    const whatsappShare = document.getElementById('whatsappShare');
+    const toast = document.getElementById('toast');
+
+    let currentPostUrl = '';
+    let currentPostCaption = '';
+
+    // Open share modal
+    shareButtons.forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const postId = this.dataset.postId;
+        const postCaption = this.dataset.postCaption;
+        const postImage = this.dataset.postImage;
+
+        // Generate post URL (you can customize this)
+        currentPostUrl = `${window.location.origin}/post/${postId}`;
+        currentPostCaption = postCaption;
+
+        // Update social media share links
+        const encodedUrl = encodeURIComponent(currentPostUrl);
+        const encodedCaption = encodeURIComponent(postCaption);
+
+        twitterShare.href = `https://twitter.com/intent/tweet?text=${encodedCaption}&url=${encodedUrl}`;
+        facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        whatsappShare.href = `https://wa.me/?text=${encodedCaption}%20${encodedUrl}`;
+
+        shareModal.classList.add('show');
+      });
+    });
+
+    // Close share modal
+    shareCloseBtns.forEach(btn => {
+      btn.addEventListener('click', function () {
+        shareModal.classList.remove('show');
+      });
+    });
+
+    shareModal.addEventListener('click', function (e) {
+      if (e.target === shareModal) {
+        shareModal.classList.remove('show');
+      }
+    });
+
+    // Copy link functionality
+    copyLinkBtn.addEventListener('click', async function () {
+      try {
+        await navigator.clipboard.writeText(currentPostUrl);
+        showToast('Link copied to clipboard!');
+        shareModal.classList.remove('show');
+      } catch (err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = currentPostUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast('Link copied to clipboard!');
+        shareModal.classList.remove('show');
+      }
+    });
+
+    // Show toast notification
+    function showToast(message) {
+      const toastMessage = document.getElementById('toastMessage');
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
   </script>
 </body>
 
