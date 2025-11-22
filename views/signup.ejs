@@ -1,56 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signup</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
 
-  <body>
-    <div class="container">
-      <div class="content">
-        <p class="header">Create Account</p>
-        <form action="/register" method="post" enctype="multipart/form-data">
-          
-          <input
-            type="text"
-            name="username"
-            placeholder="username"
-            class="detail"
-          /><br />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            class="detail"
-          /><br />
-          <input
-            type="text"
-            name="fullname"
-            placeholder="Fullname"
-            class="detail"
-          /><br />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            class="detail"
-          />
-          
-            <input class="form-control" type="file" name="avatar">
-  
-          <button type="submit" class="btn int">Register</button>
-        </form>
-        <a href="/login">Already On PicStudio? Login</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signup</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/header.css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
 
-        <footer>
-          <p>
-            By continuing, you agree to PicStudio's
-            <b>Terms of Service, Privacy policy.</b>
-          </p>
-        </footer>
+<body>
+  <button class="theme-toggle" id="theme-toggle" title="Toggle theme"
+    style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <i class="ri-moon-line"></i>
+  </button>
+  <div class="main-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Create Account</h1>
+        <p>Join PicStudio to share your moments</p>
+      </div>
+
+      <form action="/register" method="post" enctype="multipart/form-data" class="auth-form">
+        <div class="form-group">
+          <input type="text" name="username" placeholder="Username" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Email Address" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="fullname" placeholder="Full Name" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Password" class="form-input" required />
+        </div>
+
+        <div class="form-group file-input-group">
+          <label for="avatar" class="file-label">Upload Profile Picture</label>
+          <input class="form-control" type="file" name="avatar" id="avatar">
+        </div>
+
+        <button type="submit" class="btn-primary">Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Already have an account? <a href="/login">Log in</a></p>
       </div>
     </div>
-  </body>
+
+    <footer class="site-footer">
+      <p>
+        By continuing, you agree to PicStudio's
+        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('i');
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      themeIcon.classList.remove('ri-moon-line');
+      themeIcon.classList.add('ri-sun-line');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+
+      if (document.body.classList.contains('dark-mode')) {
+        themeIcon.classList.remove('ri-moon-line');
+        themeIcon.classList.add('ri-sun-line');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeIcon.classList.remove('ri-sun-line');
+        themeIcon.classList.add('ri-moon-line');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+</body>
+
 </html>

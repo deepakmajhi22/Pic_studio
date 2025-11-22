@@ -4,50 +4,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PicStore/login</title>
+    <title>PicStore - Login</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
-   
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 
 <body>
+    <button class="theme-toggle" id="theme-toggle" title="Toggle theme"
+        style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        <i class="ri-moon-line"></i>
+    </button>
+    <div class="main-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Login</h1>
+                <p>Welcome back to PicStudio</p>
+            </div>
 
-      
+            <% if (message && message.length> 0) { %>
+                <div class="alert alert-danger" role="alert" style="color: red; margin-bottom: 15px;">
+                    <%= message %>
+                </div>
+                <% } %>
 
-    <div class="container">
+                    <form action="/login" method="post" class="auth-form">
+                        <div class="form-group">
+                            <input type="text" name="username" placeholder="Username" class="form-input" required />
+                        </div>
 
-        <div class="content">
+                        <div class="form-group">
+                            <input type="password" name="password" placeholder="Password" class="form-input" required />
+                        </div>
 
-            <img src="./images/PIC STORE.png" alt="pin logo"
-                class="img1" />
-            <p class="header">Login</p>
-            <div class="alert alert-danger" role="alert">
-                <%= message %>   <!--this is a flash message -->
-              </div>
-         
-            <form action="login" method="post">
-             
-                <input type="text" name="username" placeholder="username" class="detail" /><br />
-            
-                <input type="password" name="password" placeholder="Password" class="detail" />
-                <button class="btn int">Login</button>
+                        <button type="submit" class="btn-primary">Login</button>
+                    </form>
 
-            </form>
-            <br>
-            <br>
-            <a href="/">New To CodeStudio, Sign Up </a>
-            <br>
-            <br>
-            <p>If you want to test: <br> username: test <br>
-                password: test</p>
-        
+                    <div class="auth-footer">
+                        <p>New to PicStudio? <a href="/">Sign Up</a></p>
+                        <br>
+                        <p style="font-size: 12px; color: #999;">
+                            Test Account:<br>
+                            Username: test<br>
+                            Password: test
+                        </p>
+                    </div>
         </div>
-           
 
-           
-        </div>
+        <footer class="site-footer">
+            <p>
+                By continuing, you agree to PicStudio's
+                <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            </p>
+        </footer>
     </div>
 
-      
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.remove('ri-moon-line');
+            themeIcon.classList.add('ri-sun-line');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('ri-moon-line');
+                themeIcon.classList.add('ri-sun-line');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('ri-sun-line');
+                themeIcon.classList.add('ri-moon-line');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
 </body>
 
 </html>

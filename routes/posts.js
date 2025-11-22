@@ -7,12 +7,12 @@ const postSchema = new mongoose.Schema({
     required: true
   },
   image: {
-    type: String, 
-    required: true 
+    type: String,
+    required: true
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'user',
   },
   createdAt: {
     type: Date,
@@ -22,7 +22,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: "No response"
   }
-  
+
 });
 
 // Create a model for the post schema

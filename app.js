@@ -1,26 +1,28 @@
-var createError = require('http-errors'); 
-var express = require('express'); 
+require('dotenv').config();
+var createError = require('http-errors');
+var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const flash=require("connect-flash");
+const flash = require("connect-flash");
 var app = express();
-const passport= require('passport');
-const session=require('express-session');
+const passport = require('passport');
+const session = require('express-session');
 
 
 
-app.set('view engine', 'ejs');  
+app.set('view engine', 'ejs');
 
+
+const MongoStore = require('connect-mongo');
 
 app.use(session({
-
-  resave:false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Pinterest1" }),
+  resave: false,
   saveUninitialized: false,
-  secret:"hellohello",
- 
+  secret: process.env.SESSION_SECRET || "hellohello",
 }));
 app.use(flash());
 
@@ -47,12 +49,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

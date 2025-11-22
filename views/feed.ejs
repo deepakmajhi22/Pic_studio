@@ -1,70 +1,151 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-
-  <title>PicStore</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PicStudio - Feed</title>
+  <link rel="stylesheet" href="/stylesheets/header.css">
   <link rel="stylesheet" href="/stylesheets/feed.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 
 <body>
 
-  <div class="header">
-    <img
-      src="./images/PIC STORE.png"
-      class="app-icon">
-    <ul class="navigation">
-      <li> <a href="/feed">Home</a></li>
-      <li><a href="/profile">Create</a></li>
-    </ul>
-    <div class="search-bar">
-
-      <input type="text" placeholder="Search">
+  <nav class="header">
+    <div class="nav-left">
+      <a href="/feed" class="logo">PicStudio</a>
     </div>
-    <div class="nav-icons">
-
-      <a href="/profile"><img
-        src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/github-icon.png"
-        class="app-icon nav-icon arrow-icon"></a>
-      <a href="/profile"><img
-          src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/silhouette-male-icon.svg"
-          class="app-icon nav-icon arrow-icon"></a>
+    <div class="nav-center">
+      <form action="/feed" method="GET" class="search-bar">
+        <i class="ri-search-line"></i>
+        <input type="text" name="search" placeholder="Search">
+      </form>
     </div>
-  </div>
-  <div class="grid">
+    <div class="nav-right">
+      <ul class="navigation">
+        <li><a href="/feed" class="active" title="Home"><i class="ri-home-fill"></i></a></li>
+        <li><a href="/profile" title="Profile"><i class="ri-user-3-line"></i></a></li>
+        <li><a href="/logout" title="Logout"><i class="ri-logout-box-r-line"></i></a></li>
+      </ul>
+      <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+        <i class="ri-moon-line"></i>
+      </button>
+    </div>
+  </nav>
 
-    <% posts.slice().reverse().forEach(function(elem){%>
-      <div class="grid-item">
-        <img src="./images/uploads/<%= elem.image %>" class="card-img-top" />
+  <main class="container">
+    <% if (typeof noResults !=='undefined' && noResults) { %>
+      <div class="no-results-banner">
+        <i class="ri-error-warning-line"></i>
+        <span>No results found for your search.</span>
       </div>
+      <% } %>
+        <div class="feed-grid">
+          <% posts.slice().reverse().forEach(function(post){ %>
+            <div class="feed-item">
+              <div class="image-wrapper">
+                <img src="./images/uploads/<%= post.image %>" alt="<%= post.imageText %>">
+                <div class="overlay">
+                  <div class="overlay-content">
+                    <h3 class="post-caption">
+                      <%= post.imageText %>
+                    </h3>
+                    <div class="post-meta">
+                      <span class="post-author"><i class="ri-user-line"></i>
+                        <%= post.user ? post.user.username : 'Unknown' %>
+                      </span>
+                      <!-- Add more meta info here if available in post object -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+        </div>
+  </main>
 
-
-      <%}) %>
-
+  <div id="imageModal" class="image-modal">
+    <span class="close-btn">&times;</span>
+    <div class="modal-content">
+      <img class="modal-image" id="modalImage">
+      <div class="modal-caption" id="modalCaption"></div>
+    </div>
   </div>
 
-
-
-
-  </div>
-
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script>
-    $(".grid").imagesLoaded(function () {
-      $(".grid").masonry({
-        itemSelector: ".grid-item"
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('i');
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      themeIcon.classList.remove('ri-moon-line');
+      themeIcon.classList.add('ri-sun-line');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+
+      if (document.body.classList.contains('dark-mode')) {
+        themeIcon.classList.remove('ri-moon-line');
+        themeIcon.classList.add('ri-sun-line');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeIcon.classList.remove('ri-sun-line');
+        themeIcon.classList.add('ri-moon-line');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // Initialize Masonry after images are loaded
+    var grid = document.querySelector('.feed-grid');
+    var msnry;
+
+    imagesLoaded(grid, function () {
+      msnry = new Masonry(grid, {
+        itemSelector: '.feed-item',
+        columnWidth: '.feed-item',
+        percentPosition: true,
+        gutter: 0
       });
+      grid.classList.add('loaded');
+    });
+
+    // Modal Logic
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    const closeBtn = document.querySelector('.close-btn');
+    const images = document.querySelectorAll('.image-wrapper img');
+
+    images.forEach(img => {
+      img.parentElement.addEventListener('click', function () {
+        modal.classList.add('show');
+        modalImg.src = img.src;
+        modalCaption.textContent = img.alt;
+      });
+    });
+
+    closeBtn.onclick = function () {
+      modal.classList.remove('show');
+    }
+
+    modal.onclick = function (e) {
+      if (e.target === modal) {
+        modal.classList.remove('show');
+      }
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('show')) {
+        modal.classList.remove('show');
+      }
     });
   </script>
 </body>
