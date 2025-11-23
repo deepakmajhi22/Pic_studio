@@ -15,6 +15,10 @@ const session = require('express-session');
 
 app.set('view engine', 'ejs');
 
+// Trust proxy for Render deployment
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 
 const MongoStore = require('connect-mongo');
 
@@ -23,6 +27,11 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   secret: process.env.SESSION_SECRET || "hellohello",
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+  }
 }));
 app.use(flash());
 
